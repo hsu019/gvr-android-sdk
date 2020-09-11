@@ -1,17 +1,17 @@
 **November 6, 2019 update**
 
-There's a new open source [Cardboard SDK](//developers.google.com/cardboard) for
+There's a new open source [Cardboard SDK](//developers.google.com/cardboard)<!-- @IGNORE PREVIOUS: link --> for
 iOS and Android NDK that offers a streamlined API, improved device
 compatibility, and built-in viewer profile QR code scanning.
 
 
 **October 15, 2019 update**
 
-The [Daydream View](//arvr.google.com/daydream/smartphonevr/) VR headset is no
+The [Daydream View](//arvr.google.com/daydream/smartphonevr/)<!-- @IGNORE PREVIOUS: link --> VR headset is no
 longer available for purchase. However, you can continue to use this SDK to
-update and [distribute](//developers.google.com/vr/distribute/daydream/) your
+update and [distribute](//developers.google.com/vr/distribute/daydream/)<!-- @IGNORE PREVIOUS: link --> your
 apps to the Google Play Store, and make them available to users in the
-[Daydream](//play.google.com/store/apps/details?id=com.google.android.vr.home)
+[Daydream](//play.google.com/store/apps/details?id=com.google.android.vr.home)<!-- @IGNORE PREVIOUS: link -->
 app.
 
 
@@ -28,13 +28,13 @@ files in `assets` are covered by Creative Commons `LICENSE` file in that
 directory.
 
 For updates, known issues, and upgrade instructions, see the
-[release-notes](//github.com/googlevr/gvr-android-sdk/releases).
+[release-notes](//github.com/googlevr/gvr-android-sdk/releases)<!-- @IGNORE PREVIOUS: link -->.
 
 For first time users, see the
-[Get Started with Google VR on Android](//developers.google.com/vr/android/get-started)
+[Get Started with Google VR on Android](//developers.google.com/vr/android/get-started)<!-- @IGNORE PREVIOUS: link -->
 guide.
 
 SDK releases are available from the
-[releases](//github.com/googlevr/gvr-android-sdk/releases) page.
+[releases](//github.com/googlevr/gvr-android-sdk/releases)<!-- @IGNORE PREVIOUS: link --> page.
 
 Please note, we do not accept pull requests.

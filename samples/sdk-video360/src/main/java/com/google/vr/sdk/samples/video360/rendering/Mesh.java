@@ -16,12 +16,15 @@
 
 package com.google.vr.sdk.samples.video360.rendering;
 
-import static com.google.vr.sdk.samples.video360.rendering.Utils.checkGlError;
-
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
+
 import com.google.vr.sdk.base.Eye;
+
 import java.nio.FloatBuffer;
+
+import static com.google.vr.sdk.samples.video360.rendering.Utils.checkGlError;
 
 /**
  * Utility class to generate & render spherical meshes for video or images. Use the static creation
@@ -42,33 +45,28 @@ public final class Mesh {
    */
   public static final int MEDIA_STEREO_TOP_BOTTOM = 2;
 
-  // Basic vertex & fragment shaders to render a mesh with 3D position & 2D texture data.
   private static final String[] VERTEX_SHADER_CODE =
-      new String[] {
-        "uniform mat4 uMvpMatrix;",
-        "attribute vec4 aPosition;",
-        "attribute vec2 aTexCoords;",
-        "varying vec2 vTexCoords;",
+          new String[] {
+                  "uniform mat4 uMvpMatrix;",
+                  "attribute vec4 aPosition;",
+                  "attribute vec2 aTexCoords;",
+                  "varying vec2 vTexCoords;",
 
-        // Standard transformation.
-        "void main() {",
-        "  gl_Position = uMvpMatrix * aPosition;",
-        "  vTexCoords = aTexCoords;",
-        "}"
-      };
+                  "void main() {",
+                  "  gl_Position = uMvpMatrix * aPosition;",
+                  "  vTexCoords = aTexCoords;",
+                  "}"
+          };
   private static final String[] FRAGMENT_SHADER_CODE =
-      new String[] {
-        // This is required since the texture data is GL_TEXTURE_EXTERNAL_OES.
-        "#extension GL_OES_EGL_image_external : require",
-        "precision mediump float;",
+          new String[] {
+                  "precision mediump float;",
 
-        // Standard texture rendering shader.
-        "uniform samplerExternalOES uTexture;",
-        "varying vec2 vTexCoords;",
-        "void main() {",
-        "  gl_FragColor = texture2D(uTexture, vTexCoords);",
-        "}"
-      };
+                  "uniform sampler2D uTexture;",
+                  "varying vec2 vTexCoords;",
+                  "void main() {",
+                  "  gl_FragColor = texture2D(uTexture, vTexCoords);",
+                  "}"
+          };
 
   // Constants related to vertex data.
   private static final int POSITION_COORDS_PER_VERTEX = 3; // X, Y, Z.
@@ -93,7 +91,8 @@ public final class Mesh {
   private int positionHandle;
   private int texCoordsHandle;
   private int textureHandle;
-  private int textureId;
+
+  private FBO fbo;
 
   /**
    * Generates a 3D UV sphere for rendering monoscopic or stereoscopic video.
@@ -207,8 +206,8 @@ public final class Mesh {
    *
    * @param textureId GL_TEXTURE_EXTERNAL_OES used for this mesh.
    */
-  /* package */ void glInit(int textureId) {
-    this.textureId = textureId;
+  /* package */ void glInit(FBO fbo) {
+    this.fbo = fbo;
 
     program = Utils.compileProgram(VERTEX_SHADER_CODE, FRAGMENT_SHADER_CODE);
 
@@ -235,7 +234,7 @@ public final class Mesh {
 
     GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, mvpMatrix, 0);
     GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-    GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureId);
+    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, fbo.texId());
     GLES20.glUniform1i(textureHandle, 0);
     checkGlError();
 
@@ -275,7 +274,6 @@ public final class Mesh {
   /* package */ void glShutdown() {
     if (program != 0) {
       GLES20.glDeleteProgram(program);
-      GLES20.glDeleteTextures(1, new int[]{textureId}, 0);
     }
   }
 }

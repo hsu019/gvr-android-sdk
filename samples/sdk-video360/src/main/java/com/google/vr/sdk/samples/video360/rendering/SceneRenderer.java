@@ -82,6 +82,14 @@ public final class SceneRenderer {
   // This is accessed on the binder & GL Threads.
   private final float[] controllerOrientationMatrix = new float[16];
 
+  private int texWidth;
+  private int texHeight;
+
+  private int viewWidth;
+  private int viewHeight;
+
+  private FBO fbo;
+
   /**
    * Constructs the SceneRenderer with the given values.
    */
@@ -179,10 +187,18 @@ public final class SceneRenderer {
       return null;
     }
 
+    texWidth = width;
+    texHeight = height;
+
     requestedDisplayMesh = mesh;
 
     displayTexture.setDefaultBufferSize(width, height);
     return new Surface(displayTexture);
+  }
+
+  public void setViewSize(int viewWidth, int viewHeight) {
+    this.viewWidth = viewWidth;
+    this.viewHeight = viewHeight;
   }
 
   /**
@@ -213,7 +229,10 @@ public final class SceneRenderer {
 
     displayMesh = requestedDisplayMesh;
     requestedDisplayMesh = null;
-    displayMesh.glInit(displayTexId);
+
+    fbo = FBO.createFBO(displayTexId, texWidth, texHeight, viewWidth, viewHeight);
+
+    displayMesh.glInit(fbo);
 
     return true;
   }
@@ -244,6 +263,8 @@ public final class SceneRenderer {
       checkGlError();
     }
 
+    fbo.use();
+
     displayMesh.glDraw(viewProjectionMatrix, eyeType);
     if (videoUiView != null) {
       canvasQuad.glDraw(viewProjectionMatrix, videoUiView.getAlpha());
@@ -254,6 +275,10 @@ public final class SceneRenderer {
 
   /** Cleans up the GL resources. */
   public void glShutdown() {
+    if (fbo != null) {
+      fbo.destroy();
+    }
+
     if (displayMesh != null) {
       displayMesh.glShutdown();
     }

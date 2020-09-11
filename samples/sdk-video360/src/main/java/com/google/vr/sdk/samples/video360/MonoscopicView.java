@@ -300,6 +300,7 @@ public final class MonoscopicView extends GLSurfaceView {
       GLES20.glViewport(0, 0, width, height);
       Matrix.perspectiveM(
           projectionMatrix, 0, FIELD_OF_VIEW_DEGREES, (float) width / height, Z_NEAR, Z_FAR);
+      scene.setViewSize(width, height);
     }
 
     @Override

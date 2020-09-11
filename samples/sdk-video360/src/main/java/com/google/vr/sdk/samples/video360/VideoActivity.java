@@ -57,6 +57,8 @@ public class VideoActivity extends Activity {
     setContentView(R.layout.video_activity);
 
     // Configure the MonoscopicView which will render the video and UI.
+
+
     videoView = (MonoscopicView) findViewById(R.id.video_view);
     VideoUiView videoUi = (VideoUiView) findViewById(R.id.video_ui_view);
     videoUi.setVrIconClickListener(
